@@ -30,3 +30,8 @@ services:
     ports:
       - "8080:8080"
 
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "3000:80"
