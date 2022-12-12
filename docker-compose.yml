@@ -1,17 +1,32 @@
 version: '3'
 volumes:
   database:
+networks:
+  backend_network:
+    ipam:
+      config:
+        - subnet: 172.80.0.1/16
+          gateway: 172.80.0.1
 
 services:
   database:
     container_name: database
     image: postgres:latest
-    ports:
-      - "5432:5432"
+    networks:
+      backend_network:
+        ipv4_address: 172.80.0.2
     environment:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
       POSTGRES_DB: default
     volumes:
       - database:/var/lib/postgresql/data
+  backend:
+    container_name: backend
+    build: ./backend
+    networks:
+      backend_network:
+        ipv4_address: 172.80.0.3
+    ports:
+      - "8080:8080"
 
